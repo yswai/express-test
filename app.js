@@ -5,16 +5,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+require('./models/user');
+require('./models/token');
+var auth = require('./routes/auth');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var subscriptions = require('./routes/subscriptions');
+var cors = require('cors');
 
 var app = express();
 
 /* Boot Models */
 mongoose.connect('mongodb://localhost/my-express-db');
-require('./models/user');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,8 +30,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
+app.options(cors());
 app.use('/', routes);
+app.use('/auth', auth);
 app.use('/users', users);
 app.use('/subscriptions', subscriptions)
 
