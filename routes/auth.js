@@ -53,7 +53,7 @@ var handleLogout = function (req, res, next) {
   });
 }
 
-router.use(cors())
+router
   .post('/authenticate', handleLogin)
   .post('/logout', handleLogout);
 
